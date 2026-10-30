@@ -1,0 +1,780 @@
+<title>Tarjama Review Wireframes</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Noto+Naskh+Arabic:wght@400;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
+<style>
+/* Layout: app shell — top bar + screen switcher; review screen is a two-column parallel grid (English left, Arabic right). */
+:root {
+  --bg: #f4f5f7;
+  --surface: #ffffff;
+  --sunken: #eceef2;
+  --ink: #1d2230;
+  --muted: #5d6475;
+  --line: #d9dce4;
+  --accent: #7a2335;        /* oxblood, liturgical */
+  --accent-soft: #f4e4e7;
+  --approved: #1f6b4f;
+  --approved-soft: #dff1e8;
+  --flag: #b42318;
+  --flag-soft: #fde7e4;
+  --warn: #8a5a00;
+  --warn-soft: #fbf0d6;
+  --ins: #d6f0dd;
+  --del: #f8d9d6;
+  --quote: #1d5fa8;         /* Bible quote */
+  --quote-soft: #e3eefb;
+  --font-ui: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-en: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --font-ar: "Noto Naskh Arabic", "Geeza Pro", "Traditional Arabic", serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #14161c; --surface: #1c1f27; --sunken: #232733; --ink: #e7e9ef; --muted: #9ba2b3; --line: #323746;
+    --accent: #e8909f; --accent-soft: #3a2228; --approved: #6fd0a6; --approved-soft: #18352a;
+    --flag: #ff8f84; --flag-soft: #3d1f1c; --warn: #f0c565; --warn-soft: #362c14;
+    --ins: #1f4a2e; --del: #5a2723; --quote: #8ab8f0; --quote-soft: #1b2b42; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #14161c; --surface: #1c1f27; --sunken: #232733; --ink: #e7e9ef; --muted: #9ba2b3; --line: #323746;
+  --accent: #e8909f; --accent-soft: #3a2228; --approved: #6fd0a6; --approved-soft: #18352a;
+  --flag: #ff8f84; --flag-soft: #3d1f1c; --warn: #f0c565; --warn-soft: #362c14;
+  --ins: #1f4a2e; --del: #5a2723; --quote: #8ab8f0; --quote-soft: #1b2b42; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--font-ui); font-size: 14px; line-height: 1.5; }
+button, input, select, textarea { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.wrap { max-width: 1180px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+
+/* Screen switcher (wireframe chrome) */
+.switcher { background: var(--sunken); border-bottom: 1px solid var(--line); }
+.switcher .wrap { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; padding-block: 10px; }
+.switcher .label { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.switcher nav { display: flex; flex-wrap: wrap; gap: 4px; }
+.switcher a { text-decoration: none; color: var(--muted); padding: 4px 10px; border-radius: 999px; font-size: 13px; }
+.switcher a[aria-current="page"] { background: var(--surface); color: var(--ink); box-shadow: 0 0 0 1px var(--line); }
+
+/* App bar */
+.appbar { background: var(--surface); border-bottom: 1px solid var(--line); }
+.appbar .wrap { display: flex; align-items: center; gap: 16px; padding-block: 12px; flex-wrap: wrap; }
+.brand { font-family: var(--font-en); font-weight: 600; font-size: 18px; display: flex; align-items: baseline; gap: 8px; }
+.brand .ar { font-family: var(--font-ar); color: var(--accent); font-size: 17px; }
+.appnav { display: flex; gap: 2px; margin-left: 8px; flex-wrap: wrap; }
+.appnav a { text-decoration: none; color: var(--muted); padding: 6px 10px; border-radius: 6px; }
+.appnav a.on { color: var(--ink); background: var(--sunken); }
+.who { margin-left: auto; color: var(--muted); font-size: 13px; }
+.who b { color: var(--ink); font-weight: 500; }
+
+main { padding-block: 24px 64px; }
+h1 { font-family: var(--font-en); font-weight: 600; font-size: 26px; line-height: 1.2; margin: 0; text-wrap: balance; }
+h2 { font-size: 15px; font-weight: 600; margin: 0; }
+.sub { color: var(--muted); margin: 4px 0 0; }
+.head { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 20px; }
+
+.btn { border: 1px solid var(--line); background: var(--surface); padding: 7px 14px; border-radius: 6px; cursor: pointer; font-weight: 500; }
+.btn:hover { border-color: var(--muted); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--surface); }
+.btn.small { padding: 4px 10px; font-size: 13px; }
+.btn[disabled] { opacity: .45; cursor: not-allowed; }
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; }
+.note { font-size: 12px; color: var(--muted); }
+.pill { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 500; padding: 2px 8px; border-radius: 999px; white-space: nowrap; }
+.pill::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.pill.done { color: var(--approved); background: var(--approved-soft); }
+.pill.review { color: var(--muted); background: var(--sunken); }
+.pill.flag { color: var(--flag); background: var(--flag-soft); }
+.pill.warn { color: var(--warn); background: var(--warn-soft); }
+
+/* Tables */
+.tablebox { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; }
+th { text-align: left; font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); font-weight: 500; padding: 10px 14px; border-bottom: 1px solid var(--line); }
+td { padding: 12px 14px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+tr:last-child td { border-bottom: 0; }
+td.num { font-variant-numeric: tabular-nums; }
+.ar-cell { font-family: var(--font-ar); font-size: 16px; direction: rtl; text-align: right; }
+.bar { height: 6px; background: var(--sunken); border-radius: 999px; overflow: hidden; min-width: 80px; }
+.bar i { display: block; height: 100%; background: var(--accent); border-radius: inherit; transition: width .3s; }
+.bar.full i { background: var(--approved); }
+
+/* Login */
+.login { max-width: 380px; margin: 40px auto; padding: 28px; display: grid; gap: 14px; }
+.login form { display: grid; gap: 14px; }
+.login [hidden] { display: none; }
+.field { display: grid; gap: 4px; }
+.field label { font-size: 13px; font-weight: 500; }
+.field input, .field select, .field textarea { padding: 8px 10px; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); width: 100%; }
+
+/* Upload */
+.upgrid { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 20px; }
+.drop { border: 2px dashed var(--line); border-radius: 8px; padding: 36px 20px; text-align: center; display: grid; gap: 8px; justify-items: center; }
+.drop .big { font-family: var(--font-en); font-size: 18px; }
+.sims { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; }
+.state { padding: 16px 18px; border-radius: 8px; display: grid; gap: 8px; }
+.state.err { background: var(--flag-soft); color: var(--ink); border: 1px solid var(--flag); }
+.state.err b { color: var(--flag); }
+.state.ok { background: var(--surface); border: 1px solid var(--line); }
+.steps { display: grid; gap: 6px; margin: 0; padding-left: 18px; }
+
+/* Review */
+.toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 18px; padding: 12px 14px; position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; margin-bottom: 14px; }
+.toolbar .progress { display: flex; align-items: center; gap: 10px; flex: 1 1 220px; min-width: 0; }
+.toolbar .progress .bar { flex: 1; }
+.chips { display: flex; gap: 4px; flex-wrap: wrap; }
+.chip { border: 1px solid var(--line); background: var(--surface); padding: 3px 10px; border-radius: 999px; font-size: 13px; cursor: pointer; }
+.chip[aria-pressed="true"] { background: var(--ink); color: var(--surface); border-color: var(--ink); }
+.toggle { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; cursor: pointer; }
+.colhead { display: grid; grid-template-columns: 40px minmax(0, 1fr) minmax(0, 1fr) 150px; gap: 0 16px; padding: 0 14px 6px; font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.colhead .r { text-align: right; }
+.para { display: grid; grid-template-columns: 40px minmax(0, 1fr) minmax(0, 1fr) 150px; gap: 0 16px; padding: 16px 14px; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; margin-bottom: 8px; }
+.para.is-done { background: transparent; }
+.para.is-done .en, .para.is-done .ar { color: var(--muted); }
+.pno { font-variant-numeric: tabular-nums; color: var(--muted); font-size: 12px; padding-top: 4px; }
+.en { font-family: var(--font-en); font-size: 17px; line-height: 1.6; border-radius: 6px; padding: 4px 8px; margin: -4px -8px; cursor: text; min-height: 2em; }
+.en:hover { background: var(--sunken); }
+.en[contenteditable="true"] { background: var(--surface); box-shadow: 0 0 0 2px var(--accent); cursor: text; }
+.ar { font-family: var(--font-ar); font-size: 19px; line-height: 1.9; direction: rtl; text-align: right; }
+.side { display: grid; gap: 8px; align-content: start; justify-items: start; }
+.saved { font-size: 12px; color: var(--muted); min-height: 18px; }
+.gl { border-bottom: 2px solid var(--approved); background: var(--approved-soft); border-radius: 2px; position: relative; cursor: help; }
+.gl.bad { border-bottom-color: var(--flag); background: var(--flag-soft); }
+.doubt { text-decoration: underline dotted var(--warn); text-decoration-thickness: 2px; text-underline-offset: 4px; cursor: help; position: relative; }
+.bq { background: var(--quote-soft); box-shadow: inset 0 -2px 0 var(--quote); border-radius: 2px; }
+.bq.allu { background: transparent; box-shadow: none; border-bottom: 2px dashed var(--quote); }
+.verse { margin-top: 10px; border: 1px solid var(--quote); background: var(--quote-soft); border-radius: 6px; padding: 10px 12px; font-family: var(--font-ui); font-size: 13px; display: grid; gap: 6px; }
+.verse.ok { border-color: var(--line); background: transparent; color: var(--muted); }
+.verse b { color: var(--quote); font-weight: 600; }
+.verse .vt { font-family: var(--font-en); font-size: 15px; color: var(--ink); }
+.verse .acts { display: flex; gap: 6px; flex-wrap: wrap; }
+.pill.quote { color: var(--quote); background: var(--quote-soft); }
+.refbible { padding: 14px 18px; display: flex; gap: 10px 24px; flex-wrap: wrap; align-items: end; margin-bottom: 20px; }
+.refbible > div { min-width: 0; }
+.gl[data-tip]:hover::after, .gl[data-tip]:focus::after, .doubt[data-tip]:hover::after, .doubt[data-tip]:focus::after {
+  content: attr(data-tip); position: absolute; left: 0; bottom: calc(100% + 6px); z-index: 10;
+  background: var(--ink); color: var(--surface); font-family: var(--font-ui); font-size: 12px; line-height: 1.4;
+  padding: 6px 9px; border-radius: 6px; width: max-content; max-width: 260px; direction: ltr; text-align: left; white-space: normal;
+}
+.ar .gl[data-tip]:hover::after, .ar .gl[data-tip]:focus::after { left: auto; right: 0; }
+ins { background: var(--ins); text-decoration: none; border-radius: 2px; }
+del { background: var(--del); color: var(--muted); border-radius: 2px; }
+.failed { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; color: var(--flag); font-size: 14px; font-family: var(--font-ui); }
+.flagnote { font-size: 12px; color: var(--flag); font-family: var(--font-ui); margin-top: 6px; }
+.history { font-size: 12px; color: var(--muted); }
+.history summary { cursor: pointer; }
+.history ol { margin: 6px 0 0; padding-left: 16px; }
+.bookfoot { display: flex; justify-content: flex-end; gap: 10px; margin-top: 16px; flex-wrap: wrap; align-items: center; }
+.legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: 12px; color: var(--muted); margin-bottom: 10px; }
+
+/* Glossary + users */
+.twocol { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 20px; align-items: start; }
+.form { padding: 18px; display: grid; gap: 12px; }
+.terms { font-family: var(--font-en); }
+.dont { color: var(--flag); text-decoration: line-through; font-family: var(--font-ui); font-size: 13px; }
+.ok { color: var(--approved); font-weight: 600; }
+.ref { color: var(--muted); font-size: 12px; font-family: var(--font-ui); }
+.inactive td { color: var(--muted); }
+
+@media (max-width: 820px) {
+  .upgrid, .twocol { grid-template-columns: 1fr; }
+  .colhead { display: none; }
+  .para { grid-template-columns: 1fr; gap: 10px; }
+  .para .pno { padding: 0; }
+  .para .ar { order: -1; }
+  .para .pno { order: -2; }
+  .who { margin-left: 0; width: 100%; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+
+<div class="switcher">
+  <div class="wrap">
+    <span class="label">Wireframe screens</span>
+    <nav id="switch">
+      <a href="#login">1 Login</a>
+      <a href="#books">2 Books</a>
+      <a href="#upload">3 Upload</a>
+      <a href="#review">4 Review</a>
+      <a href="#glossary">5 Glossary</a>
+      <a href="#users">6 Users</a>
+    </nav>
+  </div>
+</div>
+
+<header class="appbar" id="appbar">
+  <div class="wrap">
+    <div class="brand">Tarjama Review <span class="ar">ترجمة</span></div>
+    <nav class="appnav">
+      <a href="#books" data-for="books review upload">Books</a>
+      <a href="#glossary" data-for="glossary">Glossary</a>
+      <a href="#users" data-for="users">Users</a>
+    </nav>
+    <div class="who">Signed in as <b>Mariam Haddad</b> · Admin</div>
+  </div>
+</header>
+
+<main class="wrap">
+
+<!-- 1 LOGIN -->
+<section id="s-login" hidden>
+  <div class="panel login">
+    <form id="loginForm">
+      <div>
+        <h1>Sign in</h1>
+        <p class="sub">Sign in to continue to Tarjama Review.</p>
+      </div>
+      <div class="field"><label for="lemail">Email</label><input id="lemail" type="email" value="mariam@church.example" autocomplete="off"></div>
+      <div class="field"><label for="lpass">Password</label><input id="lpass" type="password" value="example-only" autocomplete="off"></div>
+      <button class="btn primary" type="submit">Sign in</button>
+      <button class="btn" type="button" id="showRegister">Request an account</button>
+      <p class="note" id="loginMsg" aria-live="polite"></p>
+      <p class="note">Demo: use an active sample account; any password works.</p>
+    </form>
+    <form id="registerForm" hidden>
+      <div>
+        <h1>Request an account</h1>
+        <p class="sub">Verify your email, then wait for an admin to approve access.</p>
+      </div>
+      <div class="field"><label for="rname">Full name</label><input id="rname" required autocomplete="name"></div>
+      <div class="field"><label for="remail">Email</label><input id="remail" type="email" required autocomplete="email"></div>
+      <div class="field"><label for="rpass">Password</label><input id="rpass" type="password" required autocomplete="new-password"></div>
+      <button class="btn primary" type="submit">Submit request</button>
+      <button class="btn" type="button" id="showSignIn">Back to sign in</button>
+      <p class="note" id="registerMsg" aria-live="polite"></p>
+    </form>
+  </div>
+</section>
+
+<!-- 2 BOOKS -->
+<section id="s-books" hidden>
+  <div class="head">
+    <div><h1>Books</h1><p class="sub">Arabic source books and their English review progress.</p></div>
+    <a class="btn primary" href="#upload" style="text-decoration:none">Upload book</a>
+  </div>
+  <div class="panel tablebox">
+    <table>
+      <thead><tr><th>Title</th><th>Arabic title</th><th>Pages</th><th>Status</th><th style="width:22%">Reviewed</th><th></th></tr></thead>
+      <tbody>
+        <tr>
+          <td><b>The Life of Repentance</b><div class="note">Uploaded 12 Oct by Mariam Haddad</div></td>
+          <td class="ar-cell">حياة التوبة</td>
+          <td class="num">24</td>
+          <td><span class="pill review">In review</span></td>
+          <td><div style="display:flex;gap:8px;align-items:center"><div class="bar" style="flex:1"><i id="dashBar" style="width:20%"></i></div><span class="num note" id="dashPct">1 of 5</span></div></td>
+          <td><a class="btn small" href="#review" style="text-decoration:none">Review</a></td>
+        </tr>
+        <tr>
+          <td><b>Homilies for Great Lent</b><div class="note">Uploaded 15 Oct by Youssef Nasr</div></td>
+          <td class="ar-cell">عظات الصوم الكبير</td>
+          <td class="num">28</td>
+          <td><span class="pill warn">Translating 46 of 131</span></td>
+          <td><div class="bar"><i style="width:0%"></i></div></td>
+          <td><button class="btn small" disabled>Review</button></td>
+        </tr>
+        <tr>
+          <td><b>Spiritual Warfare</b><div class="note">Uploaded 2 Oct by Mariam Haddad</div></td>
+          <td class="ar-cell">الحرب الروحية</td>
+          <td class="num">18</td>
+          <td><span class="pill done">Done</span></td>
+          <td><div style="display:flex;gap:8px;align-items:center"><div class="bar full" style="flex:1"><i style="width:100%"></i></div><span class="num note">100%</span></div></td>
+          <td><button class="btn small">Export</button></td>
+        </tr>
+        <tr>
+          <td><b>Sayings on Prayer</b><div class="note">Uploaded 16 Oct by Sara Mikhail</div></td>
+          <td class="ar-cell">أقوال عن الصلاة</td>
+          <td class="num">9</td>
+          <td><span class="pill flag">3 paragraphs failed</span></td>
+          <td><div style="display:flex;gap:8px;align-items:center"><div class="bar" style="flex:1"><i style="width:8%"></i></div><span class="num note">8%</span></div></td>
+          <td><a class="btn small" href="#review" style="text-decoration:none">Review</a></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="note" style="margin-top:10px">Sample data. Limit: 30 pages per upload.</p>
+</section>
+
+<!-- 3 UPLOAD -->
+<section id="s-upload" hidden>
+  <div class="head"><div><h1>Upload a book</h1><p class="sub">Arabic source, up to 30 pages. Translation to English starts right after upload.</p></div></div>
+  <div class="upgrid">
+    <div class="panel form">
+      <div class="drop">
+        <div class="big">Drop an Arabic PDF, DOCX or TXT here</div>
+        <div class="note">PDFs need selectable text. Scanned pages are not supported yet.</div>
+        <button class="btn" type="button" id="pick">Choose file</button>
+        <div class="note" style="margin-top:6px">Wireframe: try a sample file</div>
+        <div class="sims">
+          <button class="btn small" type="button" data-sim="ok">hayat-al-tawba.pdf · 24 pages</button>
+          <button class="btn small" type="button" data-sim="long">aqwal-al-aba.pdf · 42 pages</button>
+          <button class="btn small" type="button" data-sim="scan">scan-0193.pdf · no text</button>
+        </div>
+      </div>
+      <div class="field"><label for="utitle">English title</label><input id="utitle" placeholder="e.g. The Life of Repentance"></div>
+      <div class="field"><label for="uauthor">Author (optional)</label><input id="uauthor" placeholder="e.g. Fr. author name"></div>
+      <div id="upState" aria-live="polite"></div>
+    </div>
+    <div class="panel form">
+      <h2>What happens next</h2>
+      <ol class="steps">
+        <li>We check the file: type, readable Arabic text, 30 pages or fewer.</li>
+        <li>The text is split into paragraphs.</li>
+        <li>Each paragraph is translated with the church glossary applied. Terms like <span class="ok">Old Man</span> are required; <span class="dont">Old Self</span> is not allowed.</li>
+        <li>Bible quotes are found in the Arabic and compared with the NKJV wording. The AI also marks phrases it was unsure about.</li>
+        <li>You can start reviewing as soon as the first paragraphs are ready.</li>
+      </ol>
+      <p class="note">Translation speed is not a goal for the MVP. A 24-page book takes a few minutes.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 4 REVIEW -->
+<section id="s-review" hidden>
+  <div class="head">
+    <div>
+      <div class="note"><a href="#books" style="color:inherit">Books</a> / The Life of Repentance</div>
+      <h1>The Life of Repentance <span style="font-family:var(--font-ar);font-weight:400;color:var(--muted);font-size:22px">حياة التوبة</span></h1>
+      <p class="sub">Review every paragraph, including unhighlighted text. AI highlights are suggestions only.</p>
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <div class="progress"><b class="num" id="progTxt">1 of 5 reviewed</b><div class="bar"><i id="progBar" style="width:20%"></i></div></div>
+    <div class="chips" role="group" aria-label="Filter paragraphs">
+      <button class="chip" data-filter="all" aria-pressed="true">All</button>
+      <button class="chip" data-filter="review" aria-pressed="false">In review</button>
+      <button class="chip" data-filter="suggestions" aria-pressed="false">AI suggestions</button>
+      <button class="chip" data-filter="flag" aria-pressed="false">Glossary flags</button>
+      <button class="chip" data-filter="quotes" aria-pressed="false">Bible quotes</button>
+      <button class="chip" data-filter="done" aria-pressed="false">Reviewed</button>
+    </div>
+    <label class="toggle"><input type="checkbox" id="showDiff"> Show changes vs AI draft</label>
+  </div>
+
+  <div class="legend">
+    <span><span class="gl">Approved term</span> matches the glossary</span>
+    <span><span class="gl bad">Do-not-use term</span> must be fixed</span>
+    <span><span class="bq">Bible quote</span> checked against NKJV</span>
+    <span><span class="doubt">AI doubt</span> the AI was unsure here</span>
+    <span><ins>added</ins> <del>removed</del> when showing changes</span>
+  </div>
+
+  <div class="colhead"><span>#</span><span>English (editable)</span><span class="r">Arabic source</span><span>Status</span></div>
+  <div id="paras"></div>
+
+  <div class="bookfoot">
+    <span class="note" id="bookHint">Review all 5 paragraphs to finish the book.</span>
+    <button class="btn" id="exportBtn" disabled>Export English (DOCX)</button>
+    <button class="btn primary" id="bookDone" disabled>Finish review</button>
+  </div>
+</section>
+
+<!-- 5 GLOSSARY -->
+<section id="s-glossary" hidden>
+  <div class="head"><div><h1>Church glossary</h1><p class="sub">Approved English for church terms. The translator must use these, and reviewers see them highlighted.</p></div>
+    <button class="btn" id="recheck">Re-check books</button></div>
+  <div class="panel refbible">
+    <div style="flex:1 1 260px">
+      <h2>Reference Bible</h2>
+      <p class="note" style="margin:2px 0 0">Bible quotes are found in the Arabic with the Van Dyck Bible, then the English is compared with this version.</p>
+    </div>
+    <div class="field" style="flex:0 1 240px">
+      <label for="refsel">English version</label>
+      <select id="refsel"><option>NKJV</option><option>KJV (public domain)</option></select>
+    </div>
+    <span class="pill warn" style="white-space:normal">NKJV permission pending. Comparing with KJV until it arrives.</span>
+  </div>
+  <div class="twocol">
+    <div class="panel tablebox">
+      <table>
+        <thead><tr><th>Arabic</th><th>Approved English</th><th>Do not use</th><th>Note</th></tr></thead>
+        <tbody id="glossBody"></tbody>
+      </table>
+    </div>
+    <form class="panel form" id="glossForm">
+      <h2>Add a term</h2>
+      <div class="field"><label for="gar">Arabic term</label><input id="gar" dir="rtl" style="font-family:var(--font-ar);font-size:16px" placeholder="الإنسان العتيق" required></div>
+      <div class="field"><label for="gen">Approved English</label><input id="gen" placeholder="Old Man" required></div>
+      <div class="field"><label for="gbad">Do not use (comma separated)</label><input id="gbad" placeholder="Old Self, Old Person"></div>
+      <div class="field"><label for="gnote">Note or Bible reference</label><input id="gnote" placeholder="Rom 6:6; Eph 4:22"></div>
+      <button class="btn primary" type="submit">Add term</button>
+      <p class="note" id="glossMsg" aria-live="polite">New terms apply to future translations. Use Re-check to flag existing paragraphs.</p>
+    </form>
+  </div>
+</section>
+
+<!-- 6 USERS -->
+<section id="s-users" hidden>
+  <div class="head"><div><h1>Users</h1><p class="sub">Approve verified account requests before granting access. Deactivating keeps a user's edit history.</p></div></div>
+  <div class="panel tablebox">
+      <table>
+        <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Account status</th><th>Actions</th></tr></thead>
+        <tbody id="userBody"></tbody>
+      </table>
+  </div>
+</section>
+
+</main>
+
+<script>
+(function () {
+  // ---------- Glossary ----------
+  const glossary = [
+    { ar: "الإنسان العتيق", arMatch: ["الإنسان العتيق", "إنساننا العتيق"], en: "old man", bad: ["old self", "old person"], note: "Rom 6:6; Eph 4:22" },
+    { ar: "الجديد", arMatch: ["ويلبس الجديد"], en: "new man", bad: ["new self"], note: "Eph 4:24; Col 3:10" },
+    { ar: "سر الاعتراف", arMatch: ["سر الاعتراف"], en: "Sacrament of Confession", bad: ["secret of confession", "mystery of confession"], note: "سر = Sacrament here, never \"secret\"" },
+    { ar: "الآباء", arMatch: ["الآباء"], en: "the Fathers", bad: ["the parents"], note: "Church Fathers" },
+    { ar: "الحِلّ", arMatch: ["الحل"], en: "absolution", bad: ["solution", "permission"], note: "Given by the priest" },
+    { ar: "الصليب", arMatch: ["الصليب"], en: "the Cross", bad: [], note: "Capital C" }
+  ];
+
+  // ---------- Paragraphs ----------
+  const paras = [
+    { ar: "التوبة ليست حدثًا عابرًا في حياة المؤمن، بل هي مسيرة يومية يخلع فيها الإنسان العتيق ويلبس الجديد.",
+      ai: "Repentance is not a passing event in the life of the believer; it is a daily journey in which a person puts off the old self and puts on the new.",
+      text: "Repentance is not a passing event in the life of the believer; it is a daily journey in which he puts off the old man and puts on the new man.",
+      doubts: [{ phrase: "journey", reason: "مسيرة can mean \"journey\" or \"walk\". Church books often say \"walk\"." }],
+      status: "review", history: [["AI draft", "12 Oct, 09:14"], ["Youssef Nasr", "14 Oct, 18:02"]] },
+    { ar: "يقول الرسول بولس: «عالمين هذا: أن إنساننا العتيق قد صُلب معه ليُبطل جسد الخطية». فالصليب هو بداية الحياة الجديدة.",
+      ai: "The Apostle Paul says: \"Knowing this, that our old self was crucified with Him, in order that the body of sin might be done away with.\" The Cross is the beginning of the new life.",
+      quote: { ref: "Romans 6:6", nkjv: "Knowing this, that our old man was crucified with Him, that the body of sin might be done away with." },
+      status: "review", history: [["AI draft", "12 Oct, 09:14"]] },
+    { ar: "والسر الذي يعين المؤمن في هذه المسيرة هو سر الاعتراف، حيث ينال الحل من فم الكاهن.",
+      ai: "The secret that helps the believer on this journey is the secret of confession, where he receives the solution from the mouth of the priest.",
+      status: "review", history: [["AI draft", "12 Oct, 09:15"]] },
+    { ar: "ولذلك يدعونا الآباء أن نفحص ذواتنا كل مساء، ونقدم توبة عن كل ما صدر منا.",
+      ai: "Therefore the Fathers call us to examine ourselves every evening and to offer repentance for all that has come from us.",
+      status: "done", history: [["AI draft", "12 Oct, 09:15"], ["Marked done by Youssef Nasr", "14 Oct, 18:10"]] },
+    { ar: "فمن يثبت في التوبة يختبر فرح القيامة كل يوم، لأن الرب قريب من المنكسري القلوب.",
+      ai: null, status: "failed", history: [["Translation failed (timeout) · 3 retries", "12 Oct, 09:16"]] }
+  ];
+  paras.forEach(p => { if (p.text === undefined) p.text = p.ai; });
+
+  const esc = s => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  const reEsc = s => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+  function highlightEn(text, extra = []) {
+    const marks = [...extra];
+    glossary.forEach(g => {
+      g.bad.forEach(b => marks.push({ s: b, cls: "gl bad", tip: `Do not use "${b}". Approved: "${g.en}" (${g.note})` }));
+      marks.push({ s: g.en, cls: "gl", tip: `Glossary: ${g.ar} → ${g.en} (${g.note})` });
+    });
+    marks.sort((a, b) => b.s.length - a.s.length);
+    const re = new RegExp("(" + marks.map(m => "\\b" + reEsc(m.s) + "\\b").join("|") + ")", "gi");
+    return text.split(re).map(part => {
+      const m = marks.find(x => x.s.toLowerCase() === part.toLowerCase());
+      return m ? `<span class="${m.cls}" tabindex="0" data-tip="${esc(m.tip)}">${esc(part)}</span>` : esc(part);
+    }).join("");
+  }
+  function highlightAr(text, p) {
+    let out = esc(text);
+    glossary.forEach(g => g.arMatch.forEach(a => {
+      out = out.split(a).join(`<span class="gl" tabindex="0" data-tip="${esc("Glossary: " + g.en + " (" + g.note + ")")}">${a}</span>`);
+    }));
+    if (p.quote) out = out.replace(/«[^»]+»/g, m => `<span class="bq">${m}</span>`);
+    if (p.allusion) out = out.split(p.allusion.ar).join(`<span class="bq allu">${p.allusion.ar}</span>`);
+    return out;
+  }
+
+  // ---------- Bible quotes ----------
+  // The quoted sentence in the English text (between double quotes).
+  function quoteSpan(p) {
+    if (!p.quote || !p.text) return null;
+    const m = p.text.match(/"([^"]+)"/);
+    return m ? { start: m.index + 1, end: m.index + 1 + m[1].length, str: m[1] } : null;
+  }
+  const norm = s => s.toLowerCase().replace(/[^a-z ]/g, "").replace(/\s+/g, " ").trim();
+  function quoteState(p) {
+    const q = quoteSpan(p);
+    if (!q) return null;
+    if (norm(q.str) === norm(p.quote.nkjv)) return "match";
+    return p.quote.kept ? "kept" : "differs";
+  }
+  function versePanel(p, idx) {
+    const q = quoteSpan(p), st = quoteState(p);
+    if (st === "differs") return `<div class="verse"><b>Bible quote · ${esc(p.quote.ref)} · differs from NKJV</b>
+      <div class="vt">${diff(q.str, p.quote.nkjv)}</div>
+      <span class="note">Struck-out words are in the translation. Highlighted words are the NKJV wording.</span>
+      <div class="acts"><button class="btn small primary" data-nkjv="${idx}">Use NKJV wording</button><button class="btn small" data-keep="${idx}">Keep my wording</button></div></div>`;
+    if (st === "match") return `<div class="verse ok"><b>Bible quote · ${esc(p.quote.ref)}</b> matches NKJV.</div>`;
+    if (st === "kept") return `<div class="verse ok"><b>Bible quote · ${esc(p.quote.ref)}</b> reviewer kept their own wording. This is logged in the history.</div>`;
+    if (p.allusion) return `<div class="verse ok"><b>Possible allusion · ${esc(p.allusion.ref)}</b>
+      <div class="vt">NKJV: “${esc(p.allusion.nkjv)}”</div><span class="note">A hint only. It does not block Mark done.</span></div>`;
+    return "";
+  }
+  function badTerms(text) {
+    const found = [];
+    glossary.forEach(g => g.bad.forEach(b => { if (new RegExp("\\b" + reEsc(b) + "\\b", "i").test(text)) found.push(`"${b}" → "${g.en}"`); }));
+    return found;
+  }
+  function diff(a, b) {
+    const A = a.split(/(\s+)/), B = b.split(/(\s+)/), n = A.length, m = B.length;
+    const L = Array.from({ length: n + 1 }, () => new Array(m + 1).fill(0));
+    for (let i = n - 1; i >= 0; i--) for (let j = m - 1; j >= 0; j--)
+      L[i][j] = A[i] === B[j] ? L[i + 1][j + 1] + 1 : Math.max(L[i + 1][j], L[i][j + 1]);
+    let i = 0, j = 0, out = "";
+    while (i < n && j < m) {
+      if (A[i] === B[j]) { out += esc(A[i]); i++; j++; }
+      else if (L[i + 1][j] >= L[i][j + 1]) { out += `<del>${esc(A[i])}</del>`; i++; }
+      else { out += `<ins>${esc(B[j])}</ins>`; j++; }
+    }
+    while (i < n) out += `<del>${esc(A[i++])}</del>`;
+    while (j < m) out += `<ins>${esc(B[j++])}</ins>`;
+    return out;
+  }
+
+  let filter = "all";
+  const host = document.getElementById("paras");
+  const showDiff = document.getElementById("showDiff");
+
+  function statusPill(p) {
+    if (p.status === "failed") return `<span class="pill flag">Translation failed</span>`;
+    if (p.status === "done") return `<span class="pill done">Reviewed</span>`;
+    if (quoteState(p) === "differs") return `<span class="pill quote">Verse differs</span>`;
+    if (badTerms(p.text || "").length) return `<span class="pill flag">Glossary flag</span>`;
+    return `<span class="pill review">In review</span>`;
+  }
+
+  function render() {
+    host.innerHTML = "";
+    paras.forEach((p, idx) => {
+      const flagged = p.text && badTerms(p.text).length > 0;
+      if (filter === "done" && p.status !== "done") return;
+      if (filter === "review" && p.status !== "review") return;
+      if (filter === "suggestions" && (p.status === "done" || !(p.doubts?.length || flagged || quoteState(p) === "differs" || p.allusion))) return;
+      if (filter === "flag" && !flagged) return;
+      if (filter === "quotes" && !(p.quote || p.allusion)) return;
+      const row = document.createElement("article");
+      row.className = "para" + (p.status === "done" ? " is-done" : "");
+      let enHtml;
+      if (p.status === "failed") {
+        enHtml = `<div class="failed">The translation service timed out for this paragraph. <button class="btn small" data-retry="${idx}">Retry</button></div>`;
+      } else if (showDiff.checked) {
+        enHtml = `<div class="en" aria-readonly="true">${p.ai === p.text ? esc(p.text) + ' <span class="note">(no changes)</span>' : diff(p.ai, p.text)}</div>`;
+      } else {
+        const doubts = p.status === "done" ? [] : (p.doubts || []).map(d => ({ s: d.phrase, cls: "doubt", tip: "AI unsure: " + d.reason }));
+        const q = quoteSpan(p);
+        const body = q
+          ? highlightEn(p.text.slice(0, q.start), doubts) + `<span class="bq">${highlightEn(q.str, doubts)}</span>` + highlightEn(p.text.slice(q.end), doubts)
+          : highlightEn(p.text, doubts);
+        enHtml = `<div class="en" data-edit="${idx}" tabindex="0" role="textbox" aria-label="English translation, paragraph ${idx + 1}">${body}</div>` +
+          (flagged ? `<div class="flagnote">Fix glossary terms: ${esc(badTerms(p.text).join(", "))}</div>` : "") +
+          versePanel(p, idx);
+      }
+      const canDone = p.status !== "failed";
+      row.innerHTML = `
+        <div class="pno">¶ ${idx + 1}</div>
+        <div>${enHtml}</div>
+        <div class="ar" lang="ar">${highlightAr(p.ar, p)}</div>
+        <div class="side">
+          ${statusPill(p)}
+          ${canDone ? (p.status === "done"
+            ? `<button class="btn small" data-undone="${idx}">Reopen review</button>`
+            : `<button class="btn small primary" data-done="${idx}">Mark reviewed</button>`) : ""}
+          ${p.ai && p.text !== p.ai && p.status !== "done" ? `<button class="btn small" data-revert="${idx}">Revert to AI draft</button>` : ""}
+          <div class="saved" id="saved-${idx}"></div>
+          <details class="history"><summary>History (${p.history.length})</summary><ol>${p.history.map(h => `<li>${esc(h[0])} · ${esc(h[1])}</li>`).join("")}</ol></details>
+        </div>`;
+      host.appendChild(row);
+    });
+    if (!host.children.length) host.innerHTML = `<p class="note" style="padding:16px">No paragraphs match this filter.</p>`;
+    updateProgress();
+  }
+
+  function updateProgress() {
+    const done = paras.filter(p => p.status === "done").length, total = paras.length;
+    const pct = Math.round(done / total * 100);
+    document.getElementById("progTxt").textContent = `${done} of ${total} reviewed`;
+    document.getElementById("progBar").style.width = pct + "%";
+    document.getElementById("dashBar").style.width = pct + "%";
+    document.getElementById("dashPct").textContent = `${done} of ${total}`;
+    const all = done === total;
+    document.getElementById("bookDone").disabled = !all;
+    document.getElementById("bookHint").textContent = all ? "Every paragraph has been marked reviewed." : `Review all ${total} paragraphs to finish the book (${total - done} left).`;
+  }
+
+  function stamp() { const d = new Date(); return d.toLocaleDateString("en-GB", { day: "numeric", month: "short" }) + ", " + d.toTimeString().slice(0, 5); }
+
+  host.addEventListener("click", e => {
+    const t = e.target.closest("[data-done],[data-undone],[data-revert],[data-retry],[data-nkjv],[data-keep],[data-edit]");
+    if (!t) return;
+    if (t.dataset.nkjv !== undefined) {
+      const p = paras[+t.dataset.nkjv], q = quoteSpan(p);
+      p.text = p.text.slice(0, q.start) + p.quote.nkjv + p.text.slice(q.end);
+      p.history.push([`Used NKJV wording for ${p.quote.ref}`, stamp()]); render();
+    } else if (t.dataset.keep !== undefined) {
+      const p = paras[+t.dataset.keep];
+      p.quote.kept = true; p.history.push([`Kept own wording for ${p.quote.ref} · Mariam Haddad`, stamp()]); render();
+    } else if (t.dataset.done !== undefined) {
+      const p = paras[+t.dataset.done];
+      if (quoteState(p) === "differs") { const s = document.getElementById("saved-" + t.dataset.done); s.textContent = "Resolve the Bible quote first."; s.style.color = "var(--flag)"; return; }
+      if (badTerms(p.text).length) { const s = document.getElementById("saved-" + t.dataset.done); s.textContent = "Fix the red glossary terms first."; s.style.color = "var(--flag)"; return; }
+      p.status = "done"; p.history.push(["Marked done by Mariam Haddad", stamp()]); render();
+    } else if (t.dataset.undone !== undefined) {
+      const p = paras[+t.dataset.undone]; p.status = "review"; p.history.push(["Reopened by Mariam Haddad", stamp()]); render();
+    } else if (t.dataset.revert !== undefined) {
+      const p = paras[+t.dataset.revert]; p.text = p.ai; p.history.push(["Reverted to AI draft", stamp()]); render();
+    } else if (t.dataset.retry !== undefined) {
+      const p = paras[+t.dataset.retry];
+      t.disabled = true; t.textContent = "Translating…";
+      setTimeout(() => {
+        p.ai = p.text = "Whoever stands firm in repentance tastes the joy of the Resurrection every day, for the Lord is near to the brokenhearted.";
+        p.allusion = { ref: "Psalm 34:18", ar: "الرب قريب من المنكسري القلوب", nkjv: "The LORD is near to those who have a broken heart" };
+        p.status = "review"; p.history.push(["AI draft (retry)", stamp()]); render();
+      }, 1200);
+    } else if (t.dataset.edit !== undefined && t.getAttribute("contenteditable") !== "true") {
+      startEdit(t);
+    }
+  });
+  host.addEventListener("keydown", e => {
+    const t = e.target;
+    if (t.dataset && t.dataset.edit !== undefined && t.getAttribute("contenteditable") !== "true" && e.key === "Enter") { e.preventDefault(); startEdit(t); }
+  });
+
+  let saveTimer;
+  function startEdit(el) {
+    const idx = +el.dataset.edit, p = paras[idx];
+    el.textContent = p.text;
+    el.setAttribute("contenteditable", "true");
+    el.focus();
+    const saved = document.getElementById("saved-" + idx);
+    el.addEventListener("input", () => {
+      saved.style.color = ""; saved.textContent = "Saving…";
+      clearTimeout(saveTimer);
+      saveTimer = setTimeout(() => { p.text = el.textContent.trim(); saved.textContent = "Saved · just now"; }, 800);
+    });
+    const before = p.text;
+    el.addEventListener("blur", () => {
+      clearTimeout(saveTimer);
+      const val = el.textContent.trim();
+      p.text = val;
+      if (val !== before) {
+        if (p.status === "done") p.status = "review";
+        p.history.push(["Edited by Mariam Haddad", stamp()]);
+      }
+      render();
+      const s = document.getElementById("saved-" + idx); if (s && val !== before) s.textContent = "Saved · just now";
+    }, { once: true });
+  }
+
+  showDiff.addEventListener("change", render);
+  document.querySelectorAll(".chip").forEach(c => c.addEventListener("click", () => {
+    filter = c.dataset.filter;
+    document.querySelectorAll(".chip").forEach(x => x.setAttribute("aria-pressed", x === c ? "true" : "false"));
+    render();
+  }));
+  document.getElementById("bookDone").addEventListener("click", e => {
+    e.target.textContent = "Review complete"; e.target.disabled = true;
+    document.getElementById("exportBtn").disabled = false;
+    document.getElementById("bookHint").textContent = "Review complete. You can export the English text.";
+  });
+
+  // ---------- Upload ----------
+  const upState = document.getElementById("upState");
+  document.getElementById("pick").addEventListener("click", () => {
+    upState.innerHTML = `<div class="state ok note">Wireframe: use one of the sample files above to see each state.</div>`;
+  });
+  document.querySelectorAll("[data-sim]").forEach(b => b.addEventListener("click", () => {
+    const k = b.dataset.sim;
+    if (k === "long") {
+      upState.innerHTML = `<div class="state err"><b>This file has 42 pages. The limit is 30.</b><span>Split the book into two files of 30 pages or fewer and upload each one.</span></div>`;
+    } else if (k === "scan") {
+      upState.innerHTML = `<div class="state err"><b>We couldn't read Arabic text from this file.</b><span>It looks like scanned images. Upload a PDF with selectable text, a DOCX or a TXT.</span></div>`;
+    } else {
+      document.getElementById("utitle").value = "The Life of Repentance";
+      upState.innerHTML = `<div class="state ok"><b>hayat-al-tawba.pdf · 24 pages · 118 paragraphs</b>
+        <div style="display:flex;gap:8px;align-items:center"><div class="bar" style="flex:1"><i id="tbar" style="width:0%"></i></div><span class="note num" id="tnum">0 of 118</span></div>
+        <span class="note" id="tmsg">Translating with 6 glossary terms applied…</span>
+        <a class="btn small" href="#review" style="text-decoration:none;justify-self:start">Start reviewing</a></div>`;
+      let n = 0; const iv = setInterval(() => {
+        n = Math.min(118, n + 9);
+        const bar = document.getElementById("tbar"); if (!bar) return clearInterval(iv);
+        bar.style.width = (n / 118 * 100) + "%"; document.getElementById("tnum").textContent = `${n} of 118`;
+        if (n >= 118) { clearInterval(iv); document.getElementById("tmsg").textContent = "Done. 2 paragraphs failed and can be retried from the review screen."; }
+      }, 300);
+    }
+  }));
+
+  // ---------- Glossary screen ----------
+  function renderGloss() {
+    document.getElementById("glossBody").innerHTML = glossary.map(g => `
+      <tr><td class="ar-cell">${esc(g.ar)}</td><td class="terms ok">${esc(g.en)}</td>
+      <td>${g.bad.length ? g.bad.map(b => `<span class="dont">${esc(b)}</span>`).join("<br>") : '<span class="note">None</span>'}</td>
+      <td class="ref">${esc(g.note)}</td></tr>`).join("");
+  }
+  document.getElementById("glossForm").addEventListener("submit", e => {
+    e.preventDefault();
+    const ar = gar.value.trim(), en = gen.value.trim();
+    if (!ar || !en) return;
+    glossary.push({ ar, arMatch: [ar], en, bad: gbad.value.split(",").map(s => s.trim()).filter(Boolean), note: gnote.value.trim() || "No note" });
+    e.target.reset(); renderGloss(); render();
+    document.getElementById("glossMsg").textContent = `Added "${en}". It applies to new translations.`;
+  });
+  document.getElementById("recheck").addEventListener("click", e => {
+    const n = paras.filter(p => p.text && badTerms(p.text).length).length;
+    e.target.textContent = `Re-checked · ${n} paragraph${n === 1 ? "" : "s"} flagged`;
+  });
+
+  // ---------- Users ----------
+  const users = [
+    { name: "Mariam Haddad", email: "mariam@church.example", role: "Admin", status: "active" },
+    { name: "Youssef Nasr", email: "youssef@church.example", role: "Reviewer", status: "active" },
+    { name: "Sara Mikhail", email: "sara@church.example", role: "Reviewer", status: "active" },
+    { name: "Daniel Botros", email: "daniel@church.example", role: "Reviewer", status: "deactivated" },
+    { name: "Lina George", email: "lina@example.org", role: "—", status: "pending" }
+  ];
+  function renderUsers() {
+    document.getElementById("userBody").innerHTML = users.map((u, i) => `
+      <tr class="${u.status === "deactivated" || u.status === "rejected" ? "inactive" : ""}"><td><b>${esc(u.name)}</b></td><td>${esc(u.email)}</td><td>${esc(u.role)}</td>
+      <td>${u.status === "active" ? '<span class="pill done">Active</span>' : u.status === "pending" ? '<span class="pill warn">Pending approval</span>' : u.status === "rejected" ? '<span class="pill flag">Rejected</span>' : '<span class="pill review">Deactivated</span>'}</td>
+      <td>${u.status === "pending" ? `<button class="btn small primary" data-approve="${i}">Approve as Reviewer</button> <button class="btn small" data-reject="${i}">Reject</button>` : i === 0 ? '<span class="note">You</span>' : u.status === "rejected" ? '<span class="note">No access</span>' : `<button class="btn small" data-u="${i}">${u.status === "active" ? "Deactivate" : "Reactivate"}</button>`}</td></tr>`).join("");
+  }
+  document.getElementById("userBody").addEventListener("click", e => {
+    const b = e.target.closest("[data-u],[data-approve],[data-reject]"); if (!b) return;
+    if (b.dataset.approve !== undefined) { users[+b.dataset.approve].status = "active"; users[+b.dataset.approve].role = "Reviewer"; }
+    else if (b.dataset.reject !== undefined) users[+b.dataset.reject].status = "rejected";
+    else users[+b.dataset.u].status = users[+b.dataset.u].status === "active" ? "deactivated" : "active";
+    renderUsers();
+  });
+
+  // ---------- Router ----------
+  const screens = ["login", "books", "upload", "review", "glossary", "users"];
+  function go() {
+    let s = (location.hash || "#review").slice(1);
+    if (!screens.includes(s)) s = "review";
+    screens.forEach(x => document.getElementById("s-" + x).hidden = x !== s);
+    document.getElementById("appbar").hidden = s === "login";
+    document.querySelectorAll("#switch a").forEach(a => a.setAttribute("aria-current", a.getAttribute("href") === "#" + s ? "page" : "false"));
+    document.querySelectorAll(".appnav a").forEach(a => a.classList.toggle("on", a.dataset.for.split(" ").includes(s)));
+    window.scrollTo(0, 0);
+  }
+  document.getElementById("loginForm").addEventListener("submit", e => {
+    e.preventDefault();
+    const email = document.getElementById("lemail").value.trim().toLowerCase();
+    const user = users.find(u => u.email.toLowerCase() === email);
+    const loginMsg = document.getElementById("loginMsg");
+    if (!user) loginMsg.textContent = "No Tarjama account found. Request an account first.";
+    else if (user.status === "pending") loginMsg.textContent = "Your email is verified. Your request is waiting for admin approval.";
+    else if (user.status === "rejected") loginMsg.textContent = "This account request was rejected. Contact an administrator.";
+    else if (user.status === "deactivated") loginMsg.textContent = "This account is deactivated. Contact an administrator.";
+    else location.hash = "books";
+  });
+  document.getElementById("showRegister").addEventListener("click", () => {
+    document.getElementById("loginForm").hidden = true;
+    document.getElementById("registerForm").hidden = false;
+  });
+  document.getElementById("showSignIn").addEventListener("click", () => {
+    document.getElementById("registerForm").hidden = true;
+    document.getElementById("loginForm").hidden = false;
+  });
+  document.getElementById("registerForm").addEventListener("submit", e => {
+    e.preventDefault();
+    users.push({ name: document.getElementById("rname").value.trim(), email: document.getElementById("remail").value.trim(), role: "—", status: "pending" });
+    renderUsers();
+    document.getElementById("registerMsg").textContent = "Request submitted. Verify your email, then wait for an admin to approve access. Books remain locked until approval.";
+    e.target.reset();
+  });
+  window.addEventListener("hashchange", go);
+
+  renderGloss(); renderUsers(); render(); go();
+})();
+</script>
