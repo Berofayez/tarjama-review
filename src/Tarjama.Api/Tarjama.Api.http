@@ -1,0 +1,6 @@
+@Tarjama.Api_HostAddress = http://localhost:5200
+
+GET {{Tarjama.Api_HostAddress}}/api/health
+Accept: application/json
+
+###
